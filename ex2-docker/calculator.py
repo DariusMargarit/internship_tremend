@@ -2,6 +2,14 @@ from flask import Flask, request, jsonify, render_template_string
 
 app = Flask(__name__)
 
+def handle_shutdown(signum, frame):
+    print("Shutting down gracefully...")
+    sys.exit(0)
+
+# Catch termination signals
+signal.signal(signal.SIGTERM, handle_shutdown)
+signal.signal(signal.SIGINT, handle_shutdown)
+
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html>
