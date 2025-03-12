@@ -77,11 +77,11 @@ Create `setup_restore.sh`:
 echo "Starting PostgreSQL Restore Process..."
 
 # Start second container and restore the database
-docker run --name pg_container_restore -e POSTGRES_USER=tremend -e POSTGRES_PASSWORD=securepass -d -p 5433:5432 postgres
+docker run --name pg_container_restore -e POSTGRES_USER=user -e POSTGRES_PASSWORD=securepass -d -p 5433:5432 postgres
 sleep 10
-docker exec pg_container_restore psql -U tremend -c "CREATE DATABASE company_db_restore;"
+docker exec pg_container_restore psql -U user -c "CREATE DATABASE company_db_restore;"
 
-docker exec pg_container_restore psql -U tremend -d company_db_restore -c "CREATE USER ps_cee WITH SUPERUSER PASSWORD 'adminpass';"
+docker exec pg_container_restore psql -U user -d company_db_restore -c "CREATE USER ps_cee WITH SUPERUSER PASSWORD 'adminpass';"
 
 docker cp company_db_dump.sql pg_container_restore:/company_db_dump.sql
 docker exec pg_container_restore psql -U ps_cee -d company_db_restore -c "ALTER DATABASE company_db_restore OWNER TO ps_cee;"
