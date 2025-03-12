@@ -13,18 +13,18 @@ This project sets up two PostgreSQL database containers, imports data, executes 
 
 ### 1. Run the First PostgreSQL Container Manually
 ```bash
-docker run --name pg_container -e POSTGRES_USER=tremend -e POSTGRES_PASSWORD=securepass -d -p 5432:5432 postgres
+docker run --name pg_container -e POSTGRES_USER=user -e POSTGRES_PASSWORD=securepass -d -p 5432:5432 postgres
 ```
 
 ### 2. Create a Database
 ```bash
-docker exec -it pg_container psql -U tremend -c "CREATE DATABASE company_db;"
+docker exec -it pg_container psql -U user -c "CREATE DATABASE company_db;"
 ```
 
 ### 3. Import the Dataset
 ```bash
 docker cp populatedb.sql pg_container:/populatedb.sql
-docker exec -it pg_container psql -U tremend -d company_db -f /populatedb.sql
+docker exec -it pg_container psql -U user -d company_db -f /populatedb.sql
 ```
 
 ![Container Running](img/1.png)
@@ -32,7 +32,7 @@ docker exec -it pg_container psql -U tremend -d company_db -f /populatedb.sql
 ### 4. Execute Queries
 Get inside the PostgreSQL container:
 ```bash
-docker exec -it pg_container psql -U tremend -d company_db
+docker exec -it pg_container psql -U user -d company_db
 ```
 #### Total Employees
 ```sql
@@ -65,7 +65,7 @@ After executing queries, exit using:
 
 ### 5. Dump the Database
 ```bash
-docker exec -it pg_container pg_dump -U tremend --no-owner -d company_db -Fc -f /company_db_dump.sql
+docker exec -it pg_container pg_dump -U user --no-owner -d company_db -Fc -f /company_db_dump.sql
 docker cp pg_container:/company_db_dump.sql ./company_db_dump.sql
 ```
 
@@ -112,7 +112,7 @@ chmod +x setup_restore.sh
 
 ### 7. Persistent Volume (Bonus)
 ```bash
-docker run --name pg_container -e POSTGRES_USER=tremend -e POSTGRES_PASSWORD=securepass -v pg_data:/var/lib/postgresql/data -d -p 5432:5432 postgres
+docker run --name pg_container -e POSTGRES_USER=user -e POSTGRES_PASSWORD=securepass -v pg_data:/var/lib/postgresql/data -d -p 5432:5432 postgres
 ```
 
 ![Database Import](img/3.png)
